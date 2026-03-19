@@ -1,0 +1,55 @@
+{
+  "name": "mppx-solana",
+  "version": "0.1.0",
+  "description": "Solana SPL token payments for the Machine Payments Protocol",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "default": "./dist/server/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
+    },
+    "./router": {
+      "types": "./dist/router/index.d.ts",
+      "default": "./dist/router/index.js"
+    }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc --watch",
+    "test": "bun test",
+    "test:unit": "bun test tests/unit",
+    "test:devnet": "bun test tests/devnet",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": ["solana", "mpp", "payments", "402", "spl-token", "mppx"],
+  "license": "MIT",
+  "dependencies": {
+    "@noble/hashes": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@solana/spl-token": "^0.4.0",
+    "@solana/web3.js": "^1.95.0",
+    "mppx": "^0.3.0"
+  },
+  "devDependencies": {
+    "@solana/spl-token": "^0.4.0",
+    "@solana/web3.js": "^1.95.0",
+    "mppx": "^0.3.0",
+    "@types/node": "^22.0.0",
+    "@hono/node-server": "^1.13.0",
+    "bs58": "^5.0.0",
+    "hono": "^4.0.0",
+    "typescript": "^5.4.0"
+  }
+}
