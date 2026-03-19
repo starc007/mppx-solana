@@ -1,6 +1,6 @@
 # mpp-solana
 
-Solana SPL token payments for the [Machine Payments Protocol](https://github.com/mppxyz/mppx) (MPP) via HTTP 402.
+Solana SPL token payments for the [Machine Payments Protocol](https://mpp.dev) (MPP) via HTTP 402.
 
 Enables servers to charge for API access in any SPL token, and clients (browsers, Node.js apps, AI agents) to pay automatically — no manual invoicing, no subscriptions.
 
