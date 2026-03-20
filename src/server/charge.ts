@@ -1,6 +1,9 @@
 import { Method, Receipt, Store } from 'mppx'
 import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { getAssociatedTokenAddress } from '@solana/spl-token'
+import { hmac } from '@noble/hashes/hmac.js'
+import { sha256 } from '@noble/hashes/sha2.js'
+import { bytesToHex } from '@noble/hashes/utils.js'
 import { charge as chargeMethod } from '../methods/charge.js'
 import { resolvePool, type SolanaNetwork } from '../core/rpc.js'
 import { detectDecimals, parseAmount } from '../core/utils.js'
@@ -26,6 +29,13 @@ export namespace charge {
     store?: Store.Store
     /** How long to wait for transaction confirmation. Default: 60000ms */
     verifyTimeout?: number
+    /**
+     * Secret key for HMAC-SHA256 receipt references.
+     * When provided, the receipt `reference` field contains `HMAC(secret, signature)`
+     * instead of the raw Solana tx signature, preventing receipt-based deanonymization.
+     * Recommended: 32 bytes. Any length is accepted by HMAC-SHA256.
+     */
+    receiptSecret?: Uint8Array
   }
 }
 
@@ -131,9 +141,13 @@ export function charge(params: charge.Parameters) {
           await params.store.put(`solana:charge:consumed:${signature}`, true)
         }
 
+        const ref = params.receiptSecret
+          ? bytesToHex(hmac(sha256, params.receiptSecret, new TextEncoder().encode(signature)))
+          : signature
+
         return Receipt.from({
           method: 'solana',
-          reference: signature,
+          reference: ref,
           status: 'success',
           timestamp: new Date().toISOString(),
         })
